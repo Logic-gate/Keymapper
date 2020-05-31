@@ -6,6 +6,22 @@ Keyboard shortcuts for the fxtec pro1 - SailfishOS
 This works kind of like the sym button on the n900, where you have an instigator and then a trigger. The holder is the instigator. Once you click it(pressing the physical button) it registers that key to a file called `/home/nemo/.config/keymapper/key.log`, the next button you use is the command trigger, as in, what actually runs whatever you give it.
 
 
+# Update
+If you've already installed keymapper and want to update. Download the latest version and overwrite the dir. Don't delete anything. 
+
+Then,
+
+```bash
+make update
+
+```
+You'll need to specify the input device by name.
+
+```bash
+keymapper -s /dev/input/event3 #FXTEC Keyboard
+
+```
+
 # Installation
 
 ```bash

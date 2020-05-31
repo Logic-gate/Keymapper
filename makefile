@@ -15,6 +15,8 @@ install:
 uninstall:
 	$(MAKE) -C src uninstall
 
+update:
+	$(MAKE) -C src update
 dirs:
 	@$(MKDIR) bin
 	@$(MKDIR) build
