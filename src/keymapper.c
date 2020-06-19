@@ -50,7 +50,6 @@ char *join(char *start, const char *msg, char *close)
   strcpy (str, start);
   strcat (str, msg);
   strcat (str, close); 
-
   return str;
 }
 
@@ -61,14 +60,16 @@ int release()
     return 1;
 }
 
-char *dbus_notify(const char *msg)
+void *dbus_notify(const char *msg)
 {
     /* Lazy, but it works - TODO: Implement in Glib */
     /* Timeout 0 = 5000?? */
     char *gdbus;
     gdbus = join("gdbus call --session --dest org.freedesktop.Notifications --object-path /org/freedesktop/Notifications --method org.freedesktop.Notifications.Notify keymapper 0 \"icon-m-notifications\" \"\" \"\" \"['default', '']\" \"{'x-nemo-preview-summary': <'", msg, "'>}\" 1000");
-    return gdbus;
+    system(gdbus);
+    return EXIT_SUCCESS;
 }
+
 
 int read_config(int key)
 {
@@ -119,8 +120,8 @@ int read_config(int key)
                 }
                 else
                 {
-                    system(dbus_notify(proc));
-                    fprintf(stderr, "%s\n", "Keymapper Notification Sent");
+                    dbus_notify(proc);
+                    fprintf(stderr, "%s - %s\n", "Keymapper Notification Sent", proc);
                 }
                 
                 fprintf(stderr, "%s - %s\n", "Keymapper Excecuting Command", cmd);
@@ -155,6 +156,7 @@ void run(char *param, char *input_device)
     }
     struct input_event ev;
     signal(SIGINT, INThandler);
+    dbus_notify("Keymapper Started");
     while (1)
     {
         read(device, &ev, sizeof(ev));
