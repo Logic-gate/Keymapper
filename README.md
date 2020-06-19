@@ -71,15 +71,13 @@ The config format is as follows:
 name = "Fxtec Pro 1 Keymap shortcuts";
 keymap = {
         something_to_remeber = {
-                proc = notification header,
-                can be blank using ""
+                proc = notification header can be blank using "";
                 holder = the first button you press;
                 trigger = the second button you press;
                 cmd = a command;
         };
         another_thing = {
-                proc = notification header,
-                can be blank using ""
+                proc = notification header, can be blank using "";
                 holder = the first button you press;
                 trigger = the second button you press;
                 cmd = a command;
@@ -101,7 +99,7 @@ The default config has `echo this works` as the command for `FX + backspace`
 name = "Fxtec Pro 1 Keymap shortcuts";
 keymap = {
         testing = {
-                proc = "I am a notification"
+                proc = "I am a notification";
                 holder = 125;
                 trigger = 14;
                 cmd = "echo this works";
