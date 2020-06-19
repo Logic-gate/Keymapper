@@ -43,6 +43,33 @@ int log_keys(int store, char *state)
     return 0;
 }
 
+char *join(char *start, const char *msg, char *close)
+{
+  int size = strlen(start) + strlen(msg) + strlen(close) + 1;
+  char *str = malloc(size);
+  strcpy (str, start);
+  strcat (str, msg);
+  strcat (str, close); 
+
+  return str;
+}
+
+int release()
+{
+    para_keys.holder = 0;
+    para_keys.trigger = 0;
+    return 1;
+}
+
+char *dbus_notify(const char *msg)
+{
+    /* Lazy, but it works - TODO: Implement in Glib */
+    /* Timeout 0 = 5000?? */
+    char *gdbus;
+    gdbus = join("gdbus call --session --dest org.freedesktop.Notifications --object-path /org/freedesktop/Notifications --method org.freedesktop.Notifications.Notify keymapper 0 \"icon-m-notifications\" \"\" \"\" \"['default', '']\" \"{'x-nemo-preview-summary': <'", msg, "'>}\" 1000");
+    return gdbus;
+}
+
 int read_config(int key)
 {
     config_t cfg;
@@ -65,12 +92,14 @@ int read_config(int key)
             config_setting_t *keymap = config_setting_get_elem(keymapSetting, i);
             if (!(config_setting_lookup_int(keymap, "holder", &holder) &&
                     config_setting_lookup_int(keymap, "trigger", &trigger) &&
-                    config_setting_lookup_string(keymap, "cmd", &cmd)))
+                    config_setting_lookup_string(keymap, "cmd", &cmd) &&
+                    config_setting_lookup_string(keymap, "proc", &proc)))
                 continue;
             if (key == holder)
             {
                 para_keys.holder = key;
                 log_keys(para_keys.holder, "w");
+
             }
             else if (key == trigger)
             {
@@ -83,23 +112,28 @@ int read_config(int key)
 
             para_keys.holder = log_keys(0, "r");
             if (para_keys.trigger == trigger && para_keys.holder == holder)
-            {
+            {   
+                if (proc[0] == '\0')
+                {
+                    ;
+                }
+                else
+                {
+                    system(dbus_notify(proc));
+                    fprintf(stderr, "%s\n", "Keymapper Notification Sent");
+                }
+                
+                fprintf(stderr, "%s - %s\n", "Keymapper Excecuting Command", cmd);
                 system(cmd);
                 log_keys(0, "w");
                 config_destroy(&cfg);
                 return (EXIT_SUCCESS);
             }
+
         }
     }
     return (EXIT_FAILURE);
 
-}
-
-int release()
-{
-    para_keys.holder = 0;
-    para_keys.trigger = 0;
-    return 1;
 }
 
 int check_key(int key)
@@ -114,12 +148,18 @@ void run(char *param, char *input_device)
     char *devname;
     devname = input_device;
     int device = open(devname, O_RDONLY);
+    /* Double Check */
+    if (device == -1) {
+        fprintf(stderr, "%s is not a vaild device\n", devname);
+        return;
+    }
     struct input_event ev;
     signal(SIGINT, INThandler);
     while (1)
     {
         read(device, &ev, sizeof(ev));
-        if (ev.type != 0 || ev.code != 0 || ev.value != 0)
+        /* TODO: Add Type EV_ABS, and codes X, Y, and pressure for touchscreen */
+        if (ev.type == EV_KEY || ev.code != 0 || ev.value != 0)
         {
             if (ev.value == 1)
             {
@@ -129,7 +169,7 @@ void run(char *param, char *input_device)
                 }
                 if (0 == strcmp(param, "listen"))
                 {
-                    printf("CODE --> %d\n", ev.code);
+                    printf("CODE --> %d\nTYPE --> %d\nVALUE --> %d\n---------\n", ev.code, ev.type, ev.value);
                 }
             }
         }

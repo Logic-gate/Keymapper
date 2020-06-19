@@ -8,7 +8,7 @@ struct Key_Combo
 };
 
 struct Key_Combo para_keys;
-const char *cmd;
+const char *cmd, *proc;
 int holder, trigger;
 void run(char *param, char *input_device);
 

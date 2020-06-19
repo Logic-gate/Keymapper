@@ -8,10 +8,10 @@
 static void help_message(void)
 {
   printf("\nUsage:\n"
-    "keymapper[OPTION]<input-device>\n"
+    "keymapper [OPTION] <input-device>\n"
     "Options:\n"
     "  -l, --listen               Listen for key inputs\n"
-    "  -s, --start                Start Keymapper\n"
+    "  -s, --start                Start Keymapper point to /dev/null and continue &\n"
     "Input Device:\n"
     "  Device Input - input event  e.g. /dev/input/event3...\n"
     "\n");
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
         help_message();
         break;
       default:
-        printf("%s\n", "Usage:\nkeymapper[OPTION]<input-device>");
+        printf("%s\n", "Usage:\nkeymapper [OPTION] <input-device>");
         break;
     }
   }
