@@ -47,7 +47,7 @@ Start by running the listener
 ```bash
 $ keymapper -l /dev/input/event3
 #OR
-keymapper -l /dev/input/by-path/platform-c17a000.i2c-event-kbd 
+$ keymapper -l /dev/input/by-path/platform-c17a000.i2c-event-kbd 
 ```
 
 Start typing using your fxtec keyboard, the output should be something like this
@@ -68,18 +68,22 @@ The config format is as follows:
 ```cfg
 
 // Not recommended to run keymapper as root,
-name = "Fxtec Pro 1 Keymap shortcuts"; 
-keymap =
-{
-something_to_remeber = { 	proc = notification header, can be blank using ""
-							holder =  the first button you press; 
-							trigger = the second button you press; 
-							cmd = a command; 
-					};
-another_thing = { 	proc = notification header, can be blank using ""
-					holder = the first button you press; 
-			  		trigger = the second button you press; 
-			  		cmd = a command; };
+name = "Fxtec Pro 1 Keymap shortcuts";
+keymap = {
+        something_to_remeber = {
+                proc = notification header,
+                can be blank using ""
+                holder = the first button you press;
+                trigger = the second button you press;
+                cmd = a command;
+        };
+        another_thing = {
+                proc = notification header,
+                can be blank using ""
+                holder = the first button you press;
+                trigger = the second button you press;
+                cmd = a command;
+        };
 };
 
 ```
@@ -94,13 +98,14 @@ The default config has `echo this works` as the command for `FX + backspace`
 
 // Not recommended to run keymapper as root,
 
-name = "Fxtec Pro 1 Keymap shortcuts"; 
-keymap =
-{
-testing = { 	proc = "I am a notification"
-				holder =  125; 
-				trigger = 14; 
-				cmd = "echo this works";};
+name = "Fxtec Pro 1 Keymap shortcuts";
+keymap = {
+        testing = {
+                proc = "I am a notification"
+                holder = 125;
+                trigger = 14;
+                cmd = "echo this works";
+        };
 };
 
 ```
