@@ -23,7 +23,7 @@ int log_keys(int store, char *state)
     int first_key;
     if (0 == strcmp(state, "w"))
     {
-        fptr = fopen("/home/nemo/.config/keymapper/key.log", "w+");
+        fptr = fopen("/home/defaultuser/.config/keymapper/key.log", "w+");
         if (fptr == NULL)
         {
             debug_("Error!", "File is NULL");
@@ -34,7 +34,7 @@ int log_keys(int store, char *state)
     }
     if (0 == strcmp(state, "r"))
     {
-        fptr = fopen("/home/nemo/.config/keymapper/key.log", "r");
+        fptr = fopen("/home/defaultuser/.config/keymapper/key.log", "r");
         fscanf(fptr, "%d", &first_key);
         fclose(fptr);
         return first_key;
@@ -76,7 +76,7 @@ int read_config(int key)
     config_t cfg;
     config_setting_t * keymapSetting;
     config_init(&cfg);
-    if (!config_read_file(&cfg, "/home/nemo/.config/keymapper/keymap.config"))
+    if (!config_read_file(&cfg, "/home/defaultuser/.config/keymapper/keymap.config"))
     {
         fprintf(stderr, "%s:%d - %s\n", config_error_file(&cfg),
             config_error_line(&cfg), config_error_text(&cfg));
