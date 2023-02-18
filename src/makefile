@@ -9,10 +9,12 @@ KEYMAPPERHOME = $(HOME)/keymapper
 
 
 DEL_FILE = rm -f
+DEL_DIR = rm -rf
 INSTALL_PROGRAM = install -m 755 -p
-CC = gcc
+CC = gcc -Wall
 CFLAGS = `pkg-config --cflags libconfig`
 LIBS = `pkg-config --libs libconfig`
+
 
 ifeq ($(BUILD),debug)
 CFLAGS += -O0 -g
@@ -37,12 +39,28 @@ clean:
 
 install:
 	$(INSTALL_PROGRAM) $(TARGETDIR)/$(TARGET) $(KEYMAPPERHOME)/$(TARGET)
-	echo "We need root access to soft link keymapper to /usr/local/bin/"
+	@echo "We need root access to soft link keymapper to /usr/local/bin"
 	devel-su ln -s $(KEYMAPPERHOME)/$(TARGET) /usr/local/bin/$(TARGET)
 
 uninstall:
-	echo "We need root access to remove the soft link to keymapper in /usr/local/bin/"
+	@echo "We need root access to remove the soft link to /usr/local/bin"
 	devel-su $(DEL_FILE) /usr/local/bin/$(TARGET)
+
 	$(DEL_FILE) $(KEYMAPPERHOME)/$(TARGET); $(DEL_FILE) $(CONFIGPATH)/$(CONFIGFILE); $(DEL_FILE) $(CONFIGPATH)/$(LOGFILE)
+	$(DEL_DIR) $(CONFIGPATH)
+	$(DEL_DIR) $(KEYMAPPERHOME)
 
-
+update:
+	rm -f $(OBJECTSDIR)/*.o *~ core
+	@echo "We need root access to remove the soft link to /usr/local/bin"
+	devel-su $(DEL_FILE) /usr/local/bin/$(TARGET)
+	$(DEL_FILE) $(KEYMAPPERHOME)/$(TARGET); $(DEL_FILE) $(CONFIGPATH)/$(LOGFILE)
+	cp $(CONFIGPATH)/$(CONFIGFILE) /tmp/$(CONFIGFILE)
+	$(DEL_FILE) $(CONFIGPATH)/$(CONFIGFILE)
+	$(DEL_DIR) $(CONFIGPATH)
+	$(DEL_DIR) $(KEYMAPPERHOME)
+	make
+	make install
+	cp /tmp/$(CONFIGFILE) $(CONFIGPATH)/$(CONFIGFILE)
+	$(DEL_FILE) /tmp/$(CONFIGFILE)
+	@echo DONE!
