@@ -29,7 +29,9 @@ It will ask for your root password, so that it can soft link the executable to `
 Start by running keymapper
 
 ```
-$ keymapper listen
+$ keymapper -l /dev/input/event3
+#OR
+$ keymapper -l /dev/input/by-path/platform-c17a000.i2c-event-kbd 
 ```
 
 Start typing using your fxtec keyboard, the output should be something like this
@@ -47,16 +49,21 @@ The config format is as follows:
 ```cfg
 
 // Not recommended to run keymapper as root,
-name = "Fxtec Pro 1 Keymap shortcuts"; 
-keymap =
-{
-something_to_remeber = { holder =  the first button you press; 
-							trigger = the second button you press; 
-							cmd = a command; 
-					};
-another_thing = { holder = the first button you press; 
-			  		trigger = the second button you press; 
-			  		cmd = a command; };
+// Provide full cmdline e.g /usr/bin/jolla-camera
+name = "Fxtec Pro 1 Keymap shortcuts";
+keymap = {
+        something_to_remeber = {
+                proc = notification header can be blank using "";
+                holder = the first button you press;
+                trigger = the second button you press;
+                cmd = a command;
+        };
+        another_thing = {
+                proc = notification header, can be blank using "";
+                holder = the first button you press;
+                trigger = the second button you press;
+                cmd = a command;
+        };
 };
 
 ```
@@ -71,12 +78,16 @@ The default config has `echo this works` as the command for `FX + backspace`
 
 // Not recommended to run keymapper as root,
 
-name = "Fxtec Pro 1 Keymap shortcuts"; 
-keymap =
-{
-testing = { holder =  125; 
-				trigger = 14; 
-				cmd = "echo this works";};
+// Not recommended to run keymapper as root,
+
+name = "Fxtec Pro 1 Keymap shortcuts";
+keymap = {
+        testing = {
+                proc = "I am a notification";
+                holder = 125;
+                trigger = 14;
+                cmd = "echo this works";
+        };
 };
 
 ```
