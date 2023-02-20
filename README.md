@@ -1,9 +1,9 @@
-# Keymapper
+# Keymapper - testing Branch
 Keyboard shortcuts for the fxtec pro1 - SailfishOS
 
 
 # Getting Started
-This works kind of like the sym button on the n900, where you have an instigator and then a trigger. The holder is the instigator. Once you click it(pressing the physical button) it registers that key to a file called `/home/nemo/.config/keymapper/key.log`, the next button you use is the command trigger, as in, what actually runs whatever you give it.
+This works kind of like the sym button on the n900, where you have an instigator and then a trigger. The holder is the instigator. Once you click it(pressing the physical button) it registers that key to a file called `/home/defaultuser/.config/keymapper/key.log`, the next button you use is the command trigger, as in, what actually runs whatever you give it.
 
 
 # Installation
@@ -11,6 +11,8 @@ This works kind of like the sym button on the n900, where you have an instigator
 ```bash
 pkcon install gcc make libconfig
 ```
+
+You may want to build libconfig.  
 
 After downloading keymapper
 
@@ -22,7 +24,6 @@ makefile src
 $ make
 $ make install
 ```
-It will ask for your root password, so that it can soft link the executable to `/usr/local/bin/`
 
 # How to
 
@@ -49,20 +50,22 @@ The config format is as follows:
 ```cfg
 
 // Not recommended to run keymapper as root,
-// Provide full cmdline e.g /usr/bin/jolla-camera
+// Provide full correct-cmdline e.g /usr/bin/invoker -s -n -d 5 --type=silica-media,silica-qt5 -A -- /usr/bin/jolla-camera
+// Otherwise the process will never die
 name = "Fxtec Pro 1 Keymap shortcuts";
 keymap = {
         something_to_remeber = {
-                proc = notification header can be blank using "";
-                holder = the first button you press;
-                trigger = the second button you press;
-                cmd = a command;
+                proc = notification header can be blank using ";
+                trigger = the button you press;
+                process_name = cmdline-- this is needed to know if the pid exists
+                cmd = a command -- full cmdline.;
         };
-        another_thing = {
-                proc = notification header, can be blank using "";
-                holder = the first button you press;
-                trigger = the second button you press;
-                cmd = a command;
+        another_think = {
+                proc = notification header can be blank using ";
+                trigger = the button you press;
+                process_name = cmdline-- this is needed to know if the pid exists
+                cmd = a command -- full cmdline.;
+        };
         };
 };
 
@@ -72,23 +75,23 @@ You can add as many as you like...just keep in mind the following
 * when you run ./keymapper start, it need to run indefinitely
 * The shortcuts will be active even if the device is locked.
 
-The default config has `echo this works` as the command for `FX + backspace`
+The default config has `will lanuch the camera` as the command for the `assist button`
 
 ```cfg
 
 // Not recommended to run keymapper as root,
+// Provide full correct-cmdline e.g /usr/bin/invoker -s -n -d 5 --type=silica-media,silica-qt5 -A -- /usr/bin/jolla-camera
+// Otherwise the process will never die
 
-
-name = "Fxtec Pro 1 Keymap shortcuts";
+name = "TEST CONFING";
 keymap = {
-        testing = {
-                proc = "I am a notification";
-                holder = 125;
-                trigger = 14;
-                cmd = "echo this works";
+        assist_button = {
+                proc = "Camera Starting...";
+                trigger = 457;
+                process_name = "/usr/bin/jolla-camera"
+                cmd = "/usr/bin/invoker -s -n -d 5 --type=silica-media,silica-qt5 -A -- /usr/bin/jolla-camera";
         };
 };
-
 ```
 Where 125 is the `FX` button and 14 is `backspace`
 

@@ -81,9 +81,10 @@ int read_config(int key) {
       config_setting_t * keymap = config_setting_get_elem(keymapSetting, i);
       if (!(config_setting_lookup_int(keymap, "trigger", & trigger) &&
           config_setting_lookup_string(keymap, "cmd", & cmd) &&
+          config_setting_lookup_string(keymap, "process_name", & process_name) &&
           config_setting_lookup_string(keymap, "proc", & proc)))
         continue;
-      pid_t pid_start = proc_find(cmd);
+      pid_t pid_start = proc_find(process_name);
 
       if (key == trigger) {
         para_keys.trigger = key;
@@ -96,12 +97,12 @@ int read_config(int key) {
           if (proc[0] == '\0') {
             ;
           } else {
-            dbus_notify(proc);
+            dbus_notify(process_name);
             fprintf(stderr, "%s - %s\n", "Keymapper:Notification:Sent", proc);
           }
           fprintf(stderr, "%s - %s, %d\n", "Keymapper:Excecuting:Command", cmd, pid_start);
           popen(cmd, "r");
-          pid_t pid = proc_find(cmd);
+          pid_t pid = proc_find(process_name);
           log_keys(pid, "w");
           fprintf(stderr, "%s - %s, %d\n", "Keymapper:Command:Done", cmd, pid);
           config_destroy( & cfg);
