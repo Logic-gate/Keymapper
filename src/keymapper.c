@@ -97,7 +97,7 @@ int read_config(int key) {
           if (proc[0] == '\0') {
             ;
           } else {
-            dbus_notify(process_name);
+            dbus_notify(proc);
             fprintf(stderr, "%s - %s\n", "Keymapper:Notification:Sent", proc);
           }
           fprintf(stderr, "%s - %s, %d\n", "Keymapper:Excecuting:Command", cmd, pid_start);
