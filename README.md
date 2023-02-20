@@ -78,7 +78,6 @@ The default config has `echo this works` as the command for `FX + backspace`
 
 // Not recommended to run keymapper as root,
 
-// Not recommended to run keymapper as root,
 
 name = "Fxtec Pro 1 Keymap shortcuts";
 keymap = {
