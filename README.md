@@ -2,6 +2,10 @@
 Keyboard shortcuts for the fxtec pro1 - SailfishOS
 
 
+#TODO:
+Add temporal trigger
+Add Seq, based trigger 
+
 # Getting Started
 This works kind of like the sym button on the n900, where you have an instigator and then a trigger. The holder is the instigator. Once you click it(pressing the physical button) it registers that key to a file called `/home/defaultuser/.config/keymapper/key.log`, the next button you use is the command trigger, as in, what actually runs whatever you give it.
 
